@@ -48,6 +48,20 @@ class Run: Codable {
             partialResult + pair.value
         })
     }
+    
+    func weightedRandomFollower() -> String? {
+        var random = Int.random(in: 0 ..< total)
+        
+        for follower in followers {
+            if follower.value > random {
+                return follower.key
+            } else {
+                random -= follower.value
+            }
+        }
+        
+        return nil
+    }
 }
 
 extension Run: Hashable {
