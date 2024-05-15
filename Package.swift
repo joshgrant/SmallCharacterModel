@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "SmallCharacterModel",
+    platforms: [
+        .iOS(.v16),
+        .macOS(.v13)
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -18,6 +22,10 @@ let package = Package(
             name: "SmallCharacterModel"),
         .testTarget(
             name: "SmallCharacterModelTests",
-            dependencies: ["SmallCharacterModel"]),
+            dependencies: ["SmallCharacterModel"],
+            resources: [
+                .copy("Resources/male-names.txt"),
+                .copy("Resources/shakespeare.txt")
+            ])
     ]
 )
