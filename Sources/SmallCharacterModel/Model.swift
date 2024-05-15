@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Model: Codable {
+public class Model: Codable {
     
     var name: String
     var cohesion: Int
@@ -25,7 +25,7 @@ class Model: Codable {
         self.runs = runs
     }
     
-    static func loadOrGenerate(name: String, cohesion: Int = 3, source: URL) -> Model {
+    public static func loadOrGenerate(name: String, cohesion: Int = 3, source: URL) -> Model {
         do {
             let saveURL = try saveURL(name: name, cohesion: cohesion)
             let data = try Data(contentsOf: saveURL)
@@ -78,7 +78,7 @@ class Model: Codable {
     
     /// If the run already exists, add the followers and increment the total
     /// If the run doens't exist, simply insert it
-    func upsert(run: Run) {
+    private func upsert(run: Run) {
         guard let match = self[run] else {
             runs.insert(run)
             return
@@ -87,15 +87,15 @@ class Model: Codable {
         match.followers.merge(run.followers, uniquingKeysWith: +)
     }
     
-    subscript(run: Run) -> Run? {
+    private subscript(run: Run) -> Run? {
         runs.first { $0 == run }
     }
     
-    subscript(letters: String) -> Run? {
+    private subscript(letters: String) -> Run? {
         runs.first { $0.letters == letters }
     }
     
-    static func saveURL(name: String, cohesion: Int) throws -> URL {
+    private static func saveURL(name: String, cohesion: Int) throws -> URL {
         var directory = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         directory.append(path: Bundle.main.bundleIdentifier ?? "SmallCharacterModel")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -106,7 +106,7 @@ class Model: Codable {
 
 extension Model {
     
-    func generateWord(prefix: String = "", length: Int) throws -> String {
+    public func generateWord(prefix: String = "", length: Int) throws -> String {
         
         var word = prefix
         /// The `key` is the suffix and the `value` are the letters to skip.
