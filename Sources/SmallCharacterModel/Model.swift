@@ -7,40 +7,6 @@
 
 import Foundation
 
-class Generation {
-    
-    let cohesion: Int
-    
-    init(cohesion: Int) {
-        self.cohesion = cohesion
-    }
-    
-    /// This represents the "choices" we've made along our journey from the root
-    var path: [String] = []
-    
-    /// The key is the `word` - we ignore any followers in the value. This represents the branches we've
-    /// taken that won't satisfy the criteria (length)
-    var ignoring: [String: Set<String>] = [:]
-    
-    var word: String {
-        path.joined()
-    }
-    
-    var tail: String {
-        path.suffix(cohesion).joined()
-    }
-    
-    var last: String {
-        path.last ?? ""
-    }
-    
-    func ignore(letter: String, for word: String) {
-        var ignoreSet: Set<String> = ignoring[word] ?? []
-        ignoreSet.insert(letter)
-        ignoring[word] = ignoreSet
-    }
-}
-
 class Model: Codable {
     
     var name: String
@@ -59,13 +25,17 @@ class Model: Codable {
         self.runs = runs
     }
     
-    static func loadOrGenerate(name: String, cohesion: Int = 3, source: URL) throws -> Model {
+    static func loadOrGenerate(name: String, cohesion: Int = 3, source: URL) -> Model {
         do {
             let saveURL = try saveURL(name: name, cohesion: cohesion)
             let data = try Data(contentsOf: saveURL)
             return try JSONDecoder().decode(Model.self, from: data)
         } catch {
-            return try generate(name: name, cohesion: cohesion, source: source)
+            do {
+                return try generate(name: name, cohesion: cohesion, source: source)
+            } catch {
+                fatalError()
+            }
         }
     }
     
@@ -115,7 +85,6 @@ class Model: Codable {
         }
         
         match.followers.merge(run.followers, uniquingKeysWith: +)
-        match.total += run.total
     }
     
     subscript(run: Run) -> Run? {
@@ -137,22 +106,36 @@ class Model: Codable {
 
 extension Model {
     
-    func generateWord(prefix: String = "") -> String {
+    func generateWord(prefix: String = "", length: Int) throws -> String {
         
         var word = prefix
+        /// The `key` is the suffix and the `value` are the letters to skip.
+        var skips: [String: Set<String>] = [:]
         
         while true {
-            
-            let suffix = word.suffix(cohesion)
-            guard let run = runs.first(where: { $0.letters == suffix }) else {
+            let suffix = String(word.suffix(cohesion))
+            guard let run = self[suffix] else {
                 fatalError()
             }
             
-            guard let randomFollower = run.weightedRandomFollower() else {
-                // No followers
-                fatalError()
+            if word.count < length {
+                skips[suffix] = (skips[suffix] ?? []).union([""])
             }
             
+            guard let randomFollower = run.weightedRandomFollower(skipping: skips[suffix] ?? [], shouldTerminate: word.count == length) else {
+                // We need to backtrack by dropping the last letter
+                
+                guard word.count > 0 else {
+                    throw GenerationError.lengthIsIncompatibleWithModel
+                }
+                
+                let last = String(word.removeLast())
+                let lastSuffix = String(word.suffix(cohesion))
+                skips[lastSuffix] = (skips[lastSuffix] ?? []).union([last])
+                continue
+            }
+            
+            // If we do find a valid random follower, reset the skips.
             if randomFollower == "" {
                 break
             } else {

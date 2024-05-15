@@ -25,7 +25,8 @@ let package = Package(
             dependencies: ["SmallCharacterModel"],
             resources: [
                 .copy("Resources/male-names.txt"),
-                .copy("Resources/shakespeare.txt")
+                .copy("Resources/shakespeare.txt"),
+                .copy("Resources/pirate-terms.txt")
             ])
     ]
 )

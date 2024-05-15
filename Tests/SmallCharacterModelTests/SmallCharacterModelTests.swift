@@ -3,14 +3,14 @@ import XCTest
 
 final class SmallCharacterModelTests: XCTestCase {
     
-    let sourceName = "shakespeare"
+    let sourceName = "pirate-terms"
     var source: URL!
     var model: Model!
     
     override func setUp() {
         super.setUp()
         source = Bundle.module.url(forResource: sourceName, withExtension: "txt")
-        model = try! Model.loadOrGenerate(name: sourceName, cohesion: 3, source: source)
+        model = Model.loadOrGenerate(name: sourceName, cohesion: 3, source: source)
     }
     
     override func tearDown() {
@@ -19,8 +19,10 @@ final class SmallCharacterModelTests: XCTestCase {
 
     func test_generateWord() throws {
         for _ in 0...100 {
-            let word = model.generateWord()
+            let length = Int.random(in: 5...6)
+            let word = try model.generateWord(length: length)
             print(word)
+            XCTAssertEqual(word.count, length)
         }
     }
 }

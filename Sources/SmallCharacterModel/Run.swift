@@ -11,12 +11,10 @@ class Run: Codable {
     
     var letters: String
     var followers: [String: Int]
-    var total: Int
     
     enum CodingKeys: String, CodingKey {
         case letters = "l"
         case followers = "f"
-        case total = "t"
     }
     
     /// A `wordSlice` contains `n+1` letters, where `n` is the window size, and the additional letter
@@ -25,7 +23,6 @@ class Run: Codable {
         if wordSlice.count == 1 {
             self.letters = ""
             self.followers = [wordSlice: 1]
-            self.total = 1
         } else {
             
             let sliceStart = wordSlice.startIndex
@@ -37,23 +34,39 @@ class Run: Codable {
             
             self.letters = letters
             self.followers = [follower: 1]
-            self.total = 1
         }
     }
     
     init(letters: String, followers: [String: Int]) {
         self.letters = letters
         self.followers = followers
-        self.total = followers.reduce(0, { partialResult, pair in
-            partialResult + pair.value
-        })
     }
     
-    func weightedRandomFollower() -> String? {
-        var random = Int.random(in: 0 ..< total)
+    func weightedRandomFollower(skipping: Set<String>, shouldTerminate: Bool) -> String? {
         
-        for follower in followers {
-            if follower.value > random {
+        if shouldTerminate {
+            if followers.contains(where: { $0.key == "" }) {
+                return ""
+            } else {
+                return nil
+            }
+        }
+        
+        let filteredFollowers = followers.filter {
+            !skipping.contains($0.key)
+        }
+        
+        let total = filteredFollowers.reduce(0) { partialResult, follower in
+            if skipping.contains(follower.key) { return partialResult }
+            return partialResult + follower.value
+        }
+        
+        guard total > 0 else { return nil }
+        
+        var random = Int.random(in: 0 ... total)
+        
+        for follower in filteredFollowers {
+            if follower.value >= random {
                 return follower.key
             } else {
                 random -= follower.value
