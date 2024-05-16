@@ -34,7 +34,7 @@ public class Model: Codable {
             do {
                 return try generate(name: name, cohesion: cohesion, source: source)
             } catch {
-                fatalError()
+                fatalError(error.localizedDescription)
             }
         }
     }
@@ -46,8 +46,17 @@ public class Model: Codable {
         var runs: Set<Run> = []
 
         while let data = try handle.read(upToCount: 1), !data.isEmpty {
-
-            guard let follower = String(data: data, encoding: .utf8)?.localizedLowercase else {
+            
+            var follower: String?
+            
+            for encoding in String.Encoding.allCases {
+                if let out = String(data: data, encoding: encoding) {
+                    follower = out
+                    break
+                }
+            }
+            
+            guard let follower = follower else {
                 throw SourceError.failedToDecode(data)
             }
 

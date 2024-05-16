@@ -3,7 +3,7 @@ import XCTest
 
 final class SmallCharacterModelTests: XCTestCase {
     
-    let sourceName = "pirate-terms"
+    let sourceName = "test-set"
     var source: URL!
     var model: Model!
     
