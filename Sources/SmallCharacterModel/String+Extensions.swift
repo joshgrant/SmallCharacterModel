@@ -30,6 +30,7 @@ extension String.Encoding: CaseIterable {
     
     public static var allCases: [String.Encoding] {
         [
+            .utf8,
             .ascii,
             .iso2022JP,
             .isoLatin1,
@@ -47,7 +48,6 @@ extension String.Encoding: CaseIterable {
             .utf32,
             .utf32BigEndian,
             .utf32LittleEndian,
-            .utf8,
             .windowsCP1250,
             .windowsCP1251,
             .windowsCP1252,
