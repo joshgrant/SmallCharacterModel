@@ -36,20 +36,20 @@ public class Run: Codable {
     }
 }
 
-public extension Run: Hashable {
+extension Run: Hashable {
     
-    static func ==(lhs: Run, rhs: Run) -> Bool {
+    public static func ==(lhs: Run, rhs: Run) -> Bool {
         lhs.letters == rhs.letters
     }
     
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(letters)
     }
 }
 
-public extension Run: CustomStringConvertible {
+extension Run: CustomStringConvertible {
     
-    var description: String {
+    public var description: String {
         "\(letters): \(followers)"
     }
 }

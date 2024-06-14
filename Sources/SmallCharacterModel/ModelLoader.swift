@@ -10,7 +10,7 @@ public struct ModelLoader {
     public enum Action {
         
         @CasePathable
-        enum Delegate {
+        public enum Delegate {
             case loaded(Model)
             case requestModelGeneration(name: String, cohesion: Int, source: URL)
         }

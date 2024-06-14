@@ -10,7 +10,7 @@ public struct WordGenerator {
     
     public enum Action {
         @CasePathable
-        enum Delegate {
+        public enum Delegate {
             case newWord(String)
         }
         

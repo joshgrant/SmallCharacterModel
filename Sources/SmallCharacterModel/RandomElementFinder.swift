@@ -5,9 +5,9 @@ public struct RandomElementFinder {
     var findRandomElement: (_ elements: [String: Int], _ skipping: Set<String>, _ shouldTerminate: Bool) -> String?
 }
 
-public extension RandomElementFinder: DependencyKey {
+extension RandomElementFinder: DependencyKey {
     
-    static var liveValue: RandomElementFinder = .init { elements, skipping, shouldTerminate in
+    public static var liveValue: RandomElementFinder = .init { elements, skipping, shouldTerminate in
         if shouldTerminate {
             if elements.contains(where: { $0.key == "" }) {
                 return ""
@@ -40,7 +40,7 @@ public extension RandomElementFinder: DependencyKey {
         return nil
     }
     
-    static var testValue: RandomElementFinder = .init { elements, skipping, shouldTerminate in
+    public static var testValue: RandomElementFinder = .init { elements, skipping, shouldTerminate in
         if shouldTerminate {
             return ""
         } else {

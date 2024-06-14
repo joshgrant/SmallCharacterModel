@@ -15,7 +15,7 @@ public struct ModelBuilder {
     
     public enum Action {
         @CasePathable
-        enum Delegate {
+        public enum Delegate {
             case progress(Double)
             case saved(response: Result<URL, Error>)
         }
