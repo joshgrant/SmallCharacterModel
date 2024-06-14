@@ -2,12 +2,12 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct ModelLoader {
+public struct ModelLoader {
     
     @ObservableState
-    struct State: Equatable {}
+    public struct State: Equatable {}
     
-    enum Action {
+    public enum Action {
         
         @CasePathable
         enum Delegate {
@@ -19,7 +19,7 @@ struct ModelLoader {
         case loadOrGenerate(name: String, cohesion: Int, source: URL)
     }
     
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .delegate:

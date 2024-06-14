@@ -1,11 +1,11 @@
 import Foundation
 import ComposableArchitecture
 
-struct RandomElementFinder {
+public struct RandomElementFinder {
     var findRandomElement: (_ elements: [String: Int], _ skipping: Set<String>, _ shouldTerminate: Bool) -> String?
 }
 
-extension RandomElementFinder: DependencyKey {
+public extension RandomElementFinder: DependencyKey {
     
     static var liveValue: RandomElementFinder = .init { elements, skipping, shouldTerminate in
         if shouldTerminate {
@@ -49,11 +49,10 @@ extension RandomElementFinder: DependencyKey {
     }
 }
 
-extension DependencyValues {
+public extension DependencyValues {
     
     var randomElementFinder: RandomElementFinder {
         get { self[RandomElementFinder.self] }
         set { self[RandomElementFinder.self] = newValue }
     }
-    
 }

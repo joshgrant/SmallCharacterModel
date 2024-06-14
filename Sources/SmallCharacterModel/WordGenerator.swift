@@ -2,13 +2,13 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct WordGenerator {
+public struct WordGenerator {
     
-    struct State: Equatable {
+    public struct State: Equatable {
         var model: Model
     }
     
-    enum Action {
+    public enum Action {
         @CasePathable
         enum Delegate {
             case newWord(String)
@@ -21,7 +21,7 @@ struct WordGenerator {
     
     @Dependency(\.randomElementFinder) var randomElementFinder
     
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .generate(let prefix, let length):

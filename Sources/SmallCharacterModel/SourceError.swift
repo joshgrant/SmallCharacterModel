@@ -1,6 +1,6 @@
 import Foundation
 
-enum SourceError: Error {
+public enum SourceError: Error {
     case invalidSource(String)
     case failedToDecode(Data)
 }

@@ -2,10 +2,10 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct ModelBuilder {
+public struct ModelBuilder {
     
     @ObservableState
-    struct State: Equatable {
+    public struct State: Equatable {
         var name: String
         var cohesion: Int
         var source: URL
@@ -13,8 +13,7 @@ struct ModelBuilder {
         var runs: Set<Run> = []
     }
     
-    enum Action {
-        
+    public enum Action {
         @CasePathable
         enum Delegate {
             case progress(Double)
@@ -28,7 +27,7 @@ struct ModelBuilder {
         case save
     }
     
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .generate:

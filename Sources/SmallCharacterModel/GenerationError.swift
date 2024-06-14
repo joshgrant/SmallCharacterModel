@@ -1,5 +1,5 @@
 import Foundation
 
-enum GenerationError: Error {
+public enum GenerationError: Error {
     case lengthIsIncompatibleWithModel
 }

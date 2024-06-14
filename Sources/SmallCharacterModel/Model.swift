@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Model: Equatable, Codable {
+public struct Model: Equatable, Codable {
     var name: String
     var cohesion: Int
     var runs: Set<Run>

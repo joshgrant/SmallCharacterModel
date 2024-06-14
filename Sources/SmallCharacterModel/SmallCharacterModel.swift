@@ -2,21 +2,21 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct SmallCharacterModel {
+public struct SmallCharacterModel {
     
-    struct State: Equatable {
+    public struct State: Equatable {
         var modelLoader: ModelLoader.State
         var modelBuilder: ModelBuilder.State?
         var wordGenerator: WordGenerator.State?
     }
     
-    enum Action {
+    public enum Action {
         case modelLoader(ModelLoader.Action)
         case modelBuilder(ModelBuilder.Action)
         case wordGenerator(WordGenerator.Action)
     }
     
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Scope(state: \.modelLoader, action: \.modelLoader) {
             ModelLoader()
         }

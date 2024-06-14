@@ -1,18 +1,18 @@
 import Foundation
 
-class Run: Codable {
+public class Run: Codable {
     
-    var letters: String
-    var followers: [String: Int]
+    public var letters: String
+    public var followers: [String: Int]
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case letters = "l"
         case followers = "f"
     }
     
     /// A `wordSlice` contains `n+1` letters, where `n` is the window size, and the additional letter
     /// is the follower.
-    init(wordSlice: String) {
+    public init(wordSlice: String) {
         if wordSlice.count == 1 {
             self.letters = ""
             self.followers = [wordSlice: 1]
@@ -30,13 +30,13 @@ class Run: Codable {
         }
     }
     
-    init(letters: String, followers: [String: Int]) {
+    public init(letters: String, followers: [String: Int]) {
         self.letters = letters
         self.followers = followers
     }
 }
 
-extension Run: Hashable {
+public extension Run: Hashable {
     
     static func ==(lhs: Run, rhs: Run) -> Bool {
         lhs.letters == rhs.letters
@@ -47,7 +47,7 @@ extension Run: Hashable {
     }
 }
 
-extension Run: CustomStringConvertible {
+public extension Run: CustomStringConvertible {
     
     var description: String {
         "\(letters): \(followers)"
