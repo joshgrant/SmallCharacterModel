@@ -1,28 +1,52 @@
 import XCTest
+import ComposableArchitecture
+
 @testable import SmallCharacterModel
 
 final class SmallCharacterModelTests: XCTestCase {
     
-    let sourceName = "test-set"
-    var source: URL!
-    var model: Model!
-    
-    override func setUp() {
-        super.setUp()
-        source = Bundle.module.url(forResource: sourceName, withExtension: "txt")
-        model = Model.loadOrGenerate(name: sourceName, cohesion: 3, source: source)
+    var testSource: URL {
+        Bundle.module.url(forResource: "test-set", withExtension: "txt")!
     }
     
-    override func tearDown() {
-        source = nil
-    }
-
-    func test_generateWord() throws {
-        for _ in 0...100 {
-            let length = Int.random(in: 5...6)
-            let word = try model.generateWord(length: length)
-            print(word)
-            XCTAssertEqual(word.count, length)
+    @MainActor
+    func test_modelLoader() async {
+        let store = TestStore(initialState: SmallCharacterModel.State(
+            modelLoader: .init()
+        )) {
+            SmallCharacterModel()
         }
+        store.exhaustivity = .off
+        
+        await store.send(.modelLoader(.loadOrGenerate(name: "test-set", cohesion: 3, source: testSource)))
+        await store.receive(\.modelLoader.delegate.loaded, timeout: 5)
+    }
+    
+    @MainActor
+    func test_modelBuilder() async {
+        let store = TestStore(initialState: ModelBuilder.State(name: "test-set", cohesion: 3, source: testSource)) {
+            ModelBuilder()
+        }
+        store.exhaustivity = .off
+        
+        await store.send(.generate)
+        await store.receive(\.upsert, timeout: 1)
+        await store.receive(\.delegate.progress, timeout: 1)
+    }
+    
+    @MainActor
+    func test_wordGenerator() async {
+        let model = Model(name: "test-model", cohesion: 3, runs: [
+            .init(letters: "", followers: ["a": 1]),
+            .init(letters: "a", followers: ["a": 1, "": 1]),
+            .init(letters: "aa", followers: ["a": 1, "": 1]),
+            .init(letters: "aaa", followers: ["a": 1, "": 1]),
+        ])
+        let store = TestStore(initialState: WordGenerator.State(model: model)) {
+            WordGenerator()
+        }
+        
+        await store.send(.generate(prefix: "", length: 3))
+        await store.receive(\.delegate.newWord, "aaa")
     }
 }

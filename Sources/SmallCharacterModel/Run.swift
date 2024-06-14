@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Me on 5/13/24.
-//
-
 import Foundation
 
 class Run: Codable {
@@ -40,40 +33,6 @@ class Run: Codable {
     init(letters: String, followers: [String: Int]) {
         self.letters = letters
         self.followers = followers
-    }
-    
-    func weightedRandomFollower(skipping: Set<String>, shouldTerminate: Bool) -> String? {
-        
-        if shouldTerminate {
-            if followers.contains(where: { $0.key == "" }) {
-                return ""
-            } else {
-                return nil
-            }
-        }
-        
-        let filteredFollowers = followers.filter {
-            !skipping.contains($0.key)
-        }
-        
-        let total = filteredFollowers.reduce(0) { partialResult, follower in
-            if skipping.contains(follower.key) { return partialResult }
-            return partialResult + follower.value
-        }
-        
-        guard total > 0 else { return nil }
-        
-        var random = Int.random(in: 0 ... total)
-        
-        for follower in filteredFollowers {
-            if follower.value >= random {
-                return follower.key
-            } else {
-                random -= follower.value
-            }
-        }
-        
-        return nil
     }
 }
 
