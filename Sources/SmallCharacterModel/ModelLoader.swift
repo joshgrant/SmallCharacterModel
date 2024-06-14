@@ -11,7 +11,7 @@ public struct ModelLoader {
         
         @CasePathable
         public enum Delegate {
-            case modelLoadingFailed
+            case modelLoadingFailed(Error)
             case loaded(Model)
             case requestModelGeneration(name: String, cohesion: Int, source: URL)
         }
@@ -48,7 +48,7 @@ public struct ModelLoader {
                     } catch {
                         // Model loading failed (likely because the model didn't exist)
                         // In this case, we need to generate the model
-                        await send(.delegate(.modelLoadingFailed))
+                        await send(.delegate(.modelLoadingFailed(error)))
                     }
                 }
             }
