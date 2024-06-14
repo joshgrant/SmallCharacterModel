@@ -5,7 +5,11 @@ import ComposableArchitecture
 public struct WordGenerator {
     
     public struct State: Equatable {
-        var model: Model
+        public var model: Model
+        
+        public init(model: Model) {
+            self.model = model
+        }
     }
     
     public enum Action {

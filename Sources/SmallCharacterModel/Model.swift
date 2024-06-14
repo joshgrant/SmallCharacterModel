@@ -8,9 +8,9 @@
 import Foundation
 
 public struct Model: Equatable, Codable {
-    var name: String
-    var cohesion: Int
-    var runs: Set<Run>
+    public var name: String
+    public var cohesion: Int
+    public var runs: Set<Run>
     
     enum CodingKeys: String, CodingKey {
         case name = "n"

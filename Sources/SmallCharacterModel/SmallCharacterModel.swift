@@ -5,9 +5,13 @@ import ComposableArchitecture
 public struct SmallCharacterModel {
     
     public struct State: Equatable {
-        var modelLoader: ModelLoader.State
-        var modelBuilder: ModelBuilder.State?
-        var wordGenerator: WordGenerator.State?
+        public var modelLoader: ModelLoader.State
+        public var modelBuilder: ModelBuilder.State?
+        public var wordGenerator: WordGenerator.State?
+        
+        public init() {
+            self.modelLoader = .init()
+        }
     }
     
     public enum Action {
