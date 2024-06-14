@@ -11,9 +11,7 @@ final class SmallCharacterModelTests: XCTestCase {
     
     @MainActor
     func test_modelLoader() async {
-        let store = TestStore(initialState: SmallCharacterModel.State(
-            modelLoader: .init()
-        )) {
+        let store = TestStore(initialState: SmallCharacterModel.State()) {
             SmallCharacterModel()
         }
         store.exhaustivity = .off

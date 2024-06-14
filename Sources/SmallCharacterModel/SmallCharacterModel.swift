@@ -20,6 +20,9 @@ public struct SmallCharacterModel {
         case wordGenerator(WordGenerator.Action)
     }
     
+    public init() {
+    }
+    
     public var body: some ReducerOf<Self> {
         Scope(state: \.modelLoader, action: \.modelLoader) {
             ModelLoader()
