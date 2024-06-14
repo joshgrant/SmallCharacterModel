@@ -64,7 +64,7 @@ public struct ModelBuilder {
                         
                         remainingBytes -= 1
                         
-                        let progress = Double(remainingBytes) / Double(fileSize)
+                        let progress = Double(fileSize - remainingBytes) / Double(fileSize)
                         
                         if follower.firstIsWordChar {
                             let run = Run(letters: buffer, followers: [follower: 1])
