@@ -30,8 +30,8 @@ public struct SmallCharacterModel {
         
         Reduce { state, action in
             switch action {
-            case .modelLoader(.delegate(.loaded(let model))):
-                state.wordGenerator = .init(model: model)
+            case .modelLoader(.delegate(.loaded(let name, let cohesion, let runs))):
+                state.wordGenerator = .init(model: .init(name: name, cohesion: cohesion, runs: runs))
                 return .none
             case .modelLoader(.delegate(.requestModelGeneration(let name, let cohesion, let source))):
                 state.modelBuilder = .init(name: name, cohesion: cohesion, source: source)

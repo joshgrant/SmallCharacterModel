@@ -12,6 +12,12 @@ public struct Model: Equatable, Codable {
     public var cohesion: Int
     public var runs: Set<Run>
     
+    public init(name: String, cohesion: Int, runs: Set<Run>) {
+        self.name = name
+        self.cohesion = cohesion
+        self.runs = runs
+    }
+    
     enum CodingKeys: String, CodingKey {
         case name = "n"
         case cohesion = "c"
