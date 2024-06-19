@@ -47,15 +47,7 @@ public struct SmallCharacterModel {
     }
     
     public enum Action {
-        @CasePathable
-        public enum Delegate {
-            case modelLoaded
-        }
-        
-        case delegate(Delegate)
-        
         case load
-        
         case modelLoader(ModelLoader.Action)
         case modelBuilder(ModelBuilder.Action)
         case wordGenerator(WordGenerator.Action)
@@ -84,7 +76,7 @@ public struct SmallCharacterModel {
                 }
             case .modelLoader(.delegate(.loaded(let name, let cohesion, let runs))):
                 state.wordGenerator = .init(model: .init(name: name, cohesion: cohesion, runs: runs))
-                return .send(.delegate(.modelLoaded))
+                return .none
             case .modelLoader(.delegate(.requestModelGeneration(let name, let cohesion, let source))):
                 state.modelBuilder = .init(name: name, cohesion: cohesion, source: source)
                 return .send(.modelBuilder(.generate))
