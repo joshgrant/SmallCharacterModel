@@ -11,13 +11,12 @@ final class SmallCharacterModelTests: XCTestCase {
     
     @MainActor
     func test_modelLoader() async {
-        let store = TestStore(initialState: SmallCharacterModel.State()) {
+        let store = TestStore(initialState: SmallCharacterModel.State(source: .trainingData(.init(name: "test-set", cohesion: 3, sourceLocation: testSource)))) {
             SmallCharacterModel()
         }
         store.exhaustivity = .off
         
-        await store.send(.modelLoader(.loadFromApplicationSupportOrGenerate(name: "reset", cohesion: 3, source: testSource)))
-//        await store.receive(\.modelBuilder.delegate.saved, timeout: 5)
+        await store.send(.modelLoader(.loadFromApplicationSupport(name: "reset", cohesion: 3, source: testSource)))
     }
     
     @MainActor

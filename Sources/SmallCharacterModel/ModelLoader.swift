@@ -17,7 +17,7 @@ public struct ModelLoader {
         }
         
         case delegate(Delegate)
-        case loadFromApplicationSupportOrGenerate(name: String, cohesion: Int, source: URL)
+        case loadFromApplicationSupport(name: String, cohesion: Int, source: URL)
         case loadModelDirectly(name: String, cohesion: Int, source: URL)
     }
     
@@ -26,7 +26,7 @@ public struct ModelLoader {
             switch action {
             case .delegate:
                 return .none
-            case .loadFromApplicationSupportOrGenerate(let name, let cohesion, let source):
+            case .loadFromApplicationSupport(let name, let cohesion, let source):
                 return .run { send in
                     do {
                         let saveURL = try URL.defaultSaveURL(name: name, cohesion: cohesion)
