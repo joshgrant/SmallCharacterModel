@@ -8,12 +8,24 @@ public struct SmallCharacterModel {
         var name: String
         var cohesion: Int
         var fileExtension: String
+        
+        public init(name: String, cohesion: Int, fileExtension: String) {
+            self.name = name
+            self.cohesion = cohesion
+            self.fileExtension = fileExtension
+        }
     }
     
     public struct TrainingDataSource: Equatable {
         var name: String
         var cohesion: Int
         var sourceLocation: URL
+        
+        public init(name: String, cohesion: Int, sourceLocation: URL) {
+            self.name = name
+            self.cohesion = cohesion
+            self.sourceLocation = sourceLocation
+        }
     }
     
     public enum ModelSource: Equatable {
