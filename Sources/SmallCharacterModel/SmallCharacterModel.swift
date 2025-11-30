@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SCMFunctions {
+public struct SCMFunctions {
     
     public static func generate(
         state: inout ModelBuilderState
