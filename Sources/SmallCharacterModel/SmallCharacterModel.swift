@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SmallCharacterModel {
+struct SCMFunctions {
     
     public static func generate(
         state: inout ModelBuilderState
