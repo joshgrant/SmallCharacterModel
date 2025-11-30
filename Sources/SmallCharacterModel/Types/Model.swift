@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Me on 6/14/24.
-//
-
 import Foundation
 
 public struct Model: Equatable, Codable {

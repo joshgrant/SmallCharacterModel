@@ -1,49 +1,38 @@
-import XCTest
-import ComposableArchitecture
+import Foundation
+import Testing
 
 @testable import SmallCharacterModel
 
-final class SmallCharacterModelTests: XCTestCase {
+struct SmallCharacterModelTests {
     
     var testSource: URL {
         Bundle.module.url(forResource: "test-set", withExtension: "txt")!
     }
     
-    @MainActor
-    func test_modelLoader() async {
-        let store = TestStore(initialState: SmallCharacterModel.State(source: .trainingData(.init(name: "test-set", cohesion: 3, sourceLocation: testSource)))) {
-            SmallCharacterModel()
-        }
-        store.exhaustivity = .off
-        
-        await store.send(.modelLoader(.loadFromApplicationSupport(name: "reset", cohesion: 3, source: testSource)))
+    @Test
+    func test_modelLoader() async throws {
+        let source = TrainingDataSource(name: "test-set", cohesion: 3, sourceLocation: testSource)
+        var sut = CharacterModelState(source: .trainingData(source))
+        try loadFromApplicationSupport(name: "reset", cohesion: 3, source: testSource, state: &sut)
     }
     
-    @MainActor
-    func test_modelBuilder() async {
-        let store = TestStore(initialState: ModelBuilder.State(name: "reset", cohesion: 3, source: testSource)) {
-            ModelBuilder()
-        }
-        store.exhaustivity = .off
-        
-        await store.send(.generate)
-        await store.receive(\.upsert, timeout: 1)
-        await store.receive(\.delegate.progress, timeout: 1)
+    @Test
+    func test_modelBuilder() async throws {
+        var sut = ModelBuilderState(name: "reset", cohesion: 3, source: testSource)
+        try generate(state: &sut)
+        #expect(sut.progress != 0)
     }
     
-    @MainActor
-    func test_wordGenerator() async {
+    @Test
+    func test_wordGenerator() async throws {
         let model = Model(name: "test-model", cohesion: 3, runs: [
             .init(letters: "", followers: ["a": 1]),
             .init(letters: "a", followers: ["a": 1, "": 1]),
             .init(letters: "aa", followers: ["a": 1, "": 1]),
             .init(letters: "aaa", followers: ["a": 1, "": 1]),
         ])
-        let store = TestStore(initialState: WordGenerator.State(model: model)) {
-            WordGenerator()
-        }
         
-        await store.send(.generate(prefix: "", length: 3))
-        await store.receive(\.delegate.newWord, "aaa")
+        let word = try generate(prefix: "", length: 3, model: model)
+        #expect(word == "aaa")
     }
 }
